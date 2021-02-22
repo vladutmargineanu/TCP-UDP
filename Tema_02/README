@@ -1,0 +1,30 @@
+ Tema 2 - Protocoale de comunicatii
+ Margineanu Nicolae-Vladut 323 CA
+
+                      Aplicatie client-server TCP si UDP pentru
+                              gestionarea mesajelor
+
+  Am implementat clientii TCP in care un client TCP se conecteaza la server si
+ poate primi de la tastatura o comanda de tipul subscribe si unsubscribe si 
+ afiseaza pe ecran mesajele de la server.
+  Clientii TCP pot fi in orice numar, de aceea folosim functia select(), care 
+ ajută la controlarea mai multor descriptori (de fisiere sau socketi) in acelasi
+ timp. 
+  In realizarea subscriber-ului, am urmat pasii de mai jos:
+ - am creat socket file descriptor si am asteptat conexiuni cu functia sockfd()
+ - am completat informatiile despre server si cu ajutorul functiei bind(), odata 
+ce am obţinut un socket trebuie să ii asociez un port pe maşina locală
+ - cu ajutorul functiei listen(), facem socketul pasiv, doar pentru conectare, 
+nusi pentru scriere si citire de date
+ - in structura infinita, am realizat citirea de la tastatura, pentru obtinerea 
+comenzii (un)subscribe. Dupa care am apelat functia select() care ajuta la 
+controlarea mai multor descriptori (de fisiere sau de socketi). In functie de 
+comanda citita, am realizat actiunea dorita (in caz de unsubscribe, nu mai trimtem
+ mesaje serverului). 
+ - am apelat functia accept() pentru a primi o cerere de conexiune pe socketul 
+inactiv (cel cu listen), pe care serverul o accepta
+ - am adaugat noul socket intors de accept() la multimea descriptorilor de citire
+ - in cazul in care s-au primit date pe unul din socketii de client, serverul 
+trebuie sa ii receptioneze
+ - cu ajutorul functiei close(), inchidem conexiunea clientului TCP
+ - dupa care scoatem din multimea de citire socketul inchis.
